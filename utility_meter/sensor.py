@@ -67,7 +67,6 @@ from .const import (
     WEEKLY,
     YEARLY,
     NORMAL,
-    ALT,
     DELTA,
 )
 
@@ -221,9 +220,7 @@ async def async_setup_platform(
 
         conf_meter_type = hass.data[DATA_UTILITY][meter].get(CONF_METER_TYPE)
         conf_meter_offset = hass.data[DATA_UTILITY][meter][CONF_METER_OFFSET]
-        conf_meter_mode = hass.data[DATA_UTILITY][meter][
-            CONF_METER_MODE
-        ]
+        conf_meter_mode = hass.data[DATA_UTILITY][meter][CONF_METER_MODE]
         conf_meter_net_consumption = hass.data[DATA_UTILITY][meter][
             CONF_METER_NET_CONSUMPTION
         ]
@@ -378,15 +375,11 @@ class UtilityMeterSensor(RestoreSensor):
             ]:
                 sensor.start(source_state.attributes.get(ATTR_UNIT_OF_MEASUREMENT))
 
-        if (
-            new_state is None
-            or new_state.state in [STATE_UNKNOWN, STATE_UNAVAILABLE]
-        ):
+        if new_state is None or new_state.state in [STATE_UNKNOWN, STATE_UNAVAILABLE]:
             return
 
         if self._sensor_mode == NORMAL and (
-            old_state is None
-            or old_state.state in [STATE_UNKNOWN, STATE_UNAVAILABLE]
+            old_state is None or old_state.state in [STATE_UNKNOWN, STATE_UNAVAILABLE]
         ):
             return
 
@@ -407,12 +400,20 @@ class UtilityMeterSensor(RestoreSensor):
             self._state += adjustment
 
         except DecimalException as err:
-            if self._sensor_delta_values:
+            if self._sensor_mode == DELTA:
                 _LOGGER.warning("Invalid adjustment of %s: %s", new_state.state, err)
-            else:
+            elif self._sensor_mode == NORMAL:
                 _LOGGER.warning(
                     "Invalid state (%s > %s): %s", old_state.state, new_state.state, err
                 )
+            else:
+                _LOGGER.warning(
+                    "Invalid state (%s > %s): %s",
+                    self._last_value,
+                    new_state.state,
+                    err,
+                )
+
         self.async_write_ha_state()
 
     @callback
