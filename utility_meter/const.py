@@ -23,6 +23,16 @@ METER_TYPES = [
     YEARLY,
 ]
 
+NORMAL = "normal"
+ALT = "alt"
+DELTA = "delta"
+
+METER_MODES = [
+    NORMAL,
+    ALT,
+    DELTA,
+]
+
 DATA_UTILITY = "utility_meter_data"
 DATA_TARIFF_SENSORS = "utility_meter_sensors"
 
@@ -30,7 +40,7 @@ CONF_METER = "meter"
 CONF_SOURCE_SENSOR = "source"
 CONF_METER_TYPE = "cycle"
 CONF_METER_OFFSET = "offset"
-CONF_METER_DELTA_VALUES = "delta_values"
+CONF_METER_MODE = "meter_mode"
 CONF_METER_NET_CONSUMPTION = "net_consumption"
 CONF_PAUSED = "paused"
 CONF_TARIFFS = "tariffs"

@@ -17,7 +17,7 @@ from homeassistant.helpers.schema_config_entry_flow import (
 
 from .const import (
     BIMONTHLY,
-    CONF_METER_DELTA_VALUES,
+    CONF_METER_MODE,
     CONF_METER_NET_CONSUMPTION,
     CONF_METER_OFFSET,
     CONF_METER_TYPE,
@@ -31,6 +31,9 @@ from .const import (
     QUARTERLY,
     WEEKLY,
     YEARLY,
+    NORMAL,
+    ALT,
+    DELTA,
 )
 
 METER_TYPES = [
@@ -43,6 +46,12 @@ METER_TYPES = [
     selector.SelectOptionDict(value=BIMONTHLY, label="Every two months"),
     selector.SelectOptionDict(value=QUARTERLY, label="Quarterly"),
     selector.SelectOptionDict(value=YEARLY, label="Yearly"),
+]
+
+METER_MODES = [
+    selector.SelectOptionDict(value=NORMAL, label="Absolute, normal behavior"),
+    selector.SelectOptionDict(value=ALT, label="Absolute, alt behavior"),
+    selector.SelectOptionDict(value=DELTA, label="Delta"),
 ]
 
 
@@ -88,8 +97,10 @@ CONFIG_SCHEMA = vol.Schema(
             CONF_METER_NET_CONSUMPTION, default=False
         ): selector.BooleanSelector(),
         vol.Required(
-            CONF_METER_DELTA_VALUES, default=False
-        ): selector.BooleanSelector(),
+            CONF_METER_MODE, default=False
+        ): selector.SelectSelector(
+            selector.SelectSelectorConfig(options=METER_MODES),
+        ),
     }
 )
 
