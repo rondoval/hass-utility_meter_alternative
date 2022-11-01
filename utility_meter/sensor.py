@@ -22,10 +22,10 @@ from homeassistant.const import (
     ATTR_UNIT_OF_MEASUREMENT,
     CONF_NAME,
     CONF_UNIQUE_ID,
-    ENERGY_KILO_WATT_HOUR,
-    ENERGY_WATT_HOUR,
     STATE_UNAVAILABLE,
     STATE_UNKNOWN,
+    UnitOfEnergy,
+    UnitOfVolume,
 )
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import entity_platform, entity_registry as er
@@ -44,6 +44,7 @@ import homeassistant.util.dt as dt_util
 from .const import (
     ATTR_CRON_PATTERN,
     ATTR_VALUE,
+    ATTR_TARIFF,
     BIMONTHLY,
     CONF_CRON_PATTERN,
     CONF_METER,
@@ -88,11 +89,11 @@ ATTR_STATUS = "status"
 ATTR_PERIOD = "meter_period"
 ATTR_LAST_PERIOD = "last_period"
 ATTR_LAST_VALUE = "last_value"
-ATTR_TARIFF = "tariff"
 
 DEVICE_CLASS_MAP = {
-    ENERGY_WATT_HOUR: SensorDeviceClass.ENERGY,
-    ENERGY_KILO_WATT_HOUR: SensorDeviceClass.ENERGY,
+    UnitOfEnergy.WATT_HOUR: SensorDeviceClass.ENERGY,
+    UnitOfEnergy.KILO_WATT_HOUR: SensorDeviceClass.ENERGY,
+    UnitOfVolume.CUBIC_METERS: SensorDeviceClass.WATER,
 }
 
 ICON = "mdi:counter"
